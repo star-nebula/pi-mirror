@@ -1,0 +1,60 @@
+{
+  "name": "pi-mirror",
+  "version": "0.1.0",
+  "description": "A personal agent that thinks like you, grounded in your Markdown notes.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "pi-mirror": "./dist/cli.js"
+  },
+  "main": "./dist/extension.js",
+  "pi": {
+    "extensions": [
+      "./src/extensions/vault.ts",
+      "./src/extensions/persona.ts",
+      "./src/extensions/ask.ts",
+      "./src/extensions/write.ts",
+      "./src/extensions/guard.ts",
+      "./src/extensions/timeline.ts",
+      "./src/extensions/library.ts",
+      "./src/extensions/consent.ts",
+      "./src/extensions/research.ts",
+      "./src/extensions/reference.ts",
+      "./src/extensions/studio.ts",
+      "./src/extensions/workspace.ts"
+    ]
+  },
+  "files": [
+    "dist",
+    "src",
+    "web",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "cli": "tsx src/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "migrate": "tsx src/db/migrate.ts",
+    "serve": "tsx src/server/index.ts"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "^1.5.2",
+    "better-sqlite3": "^13.0.3",
+    "diff": "^9.0.0",
+    "typebox": "^1.4.6"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/diff": "^7.0.2",
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}

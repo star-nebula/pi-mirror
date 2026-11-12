@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+.pi-mirror/
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.*
+private/
+*.log

@@ -1,0 +1,117 @@
+<title>Studio 演示</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  :root {
+    --bg: #141813;
+    --surface: #1b2119;
+    --line: #2d362a;
+    --ink: #e8eee4;
+    --soft: #b9c6b1;
+    --muted: #8b9a83;
+    --lime: #63fe13;
+    --green: #81ce65;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+    --body: "IBM Plex Sans", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 16px/1.65 var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 48px;
+  }
+  .wrap { max-width: 980px; margin-inline: auto; display: grid; gap: 22px; }
+  .top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.01em; }
+  .mark { width: 22px; height: 22px; border: 1px solid var(--ink); border-radius: 6px; position: relative; }
+  .mark::after { content: ""; position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--lime); right: 2px; top: 6px; }
+  .meta { font: 400 .72rem var(--mono); color: var(--muted); }
+  h1 { margin: 0; font-size: clamp(1.9rem, 4.5vw, 2.7rem); line-height: 1.15; letter-spacing: -.035em; font-weight: 600; }
+  .lede { margin: 8px 0 0; color: var(--soft); max-width: 64ch; }
+  .player { background: #0b0e0a; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  video { display: block; width: 100%; height: auto; background: #0b0e0a; }
+  .bar { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 10px 14px; font: 400 .72rem var(--mono); color: var(--muted); border-top: 1px solid var(--line); }
+  .grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 22px; align-items: start; }
+  h2 { margin: 0 0 10px; font-size: 1rem; letter-spacing: .01em; }
+  p { margin: 0; color: var(--soft); }
+  ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  button.chapter { display: grid; grid-template-columns: 58px 1fr; gap: 10px; width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 9px 0; color: var(--soft); cursor: pointer; font: inherit; }
+  button.chapter:hover { color: var(--ink); }
+  button.chapter:last-child { border-bottom: 0; }
+  button.chapter time { font: 500 .74rem var(--mono); color: var(--green); padding-top: 2px; }
+  .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+  .fact { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .fact strong { display: block; font-size: 1.25rem; font-weight: 600; color: var(--ink); }
+  .fact span { font-size: .76rem; color: var(--muted); }
+  .note { border-left: 2px solid var(--lime); padding: 2px 0 2px 14px; color: var(--muted); font-size: .85rem; }
+  .note b { color: var(--soft); font-weight: 500; }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; gap: 18px; }
+    h1 { max-width: none; }
+  }
+  @media (max-width: 420px) {
+    .facts { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="mark" aria-hidden="true"></span><span>Pi-Mirror</span></div>
+    <div class="meta">2026-11-12 · local only · 4m30s</div>
+  </header>
+
+  <div>
+    <h1>Studio 的一次真实运行</h1>
+    <p class="lede">键盘、页面和 agent 都在同一个镜头里：目标是在输入框里逐字敲进去的，点「开始」之后计划、工具轨迹和 Guard 结果随运行实时刷新，最后交出内容包。没有剪辑，没有补拍，也没有事后回放。</p>
+  </div>
+
+  <div class="player">
+    <video id="v" controls preload="metadata" playsinline src="studio-demo.mp4"></video>
+    <div class="bar"><span>run_7ee71d5d · 无声录屏 · 1428×800 · 未剪辑</span><span>Chrome · ego lite · 9–10 fps 截图合成</span></div>
+  </div>
+
+  <div class="grid">
+    <section aria-labelledby="chapters">
+      <h2 id="chapters">片子里能看到什么</h2>
+      <ol>
+        <li><button class="chapter" data-t="4"><time>0:04</time><span>新目标：平台、写给谁、一句话说清要它做什么</span></button></li>
+        <li><button class="chapter" data-t="7"><time>0:07</time><span>逐字敲下目标，光标和文本都在画面里</span></button></li>
+        <li><button class="chapter" data-t="22"><time>0:22</time><span>点「开始」：计划 4 步出现，工具轨迹开始滚动</span></button></li>
+        <li><button class="chapter" data-t="80"><time>1:20</time><span>核实：读 Cursor 官方博客、翻 X 原帖、查 Bing 原文</span></button></li>
+        <li><button class="chapter" data-t="160"><time>2:40</time><span>从我的笔记里长出的角度：知识管理、写入门槛</span></button></li>
+        <li><button class="chapter" data-t="232"><time>3:52</time><span>Guard 来回六次：37% → 75% 带引用，high 清零</span></button></li>
+        <li><button class="chapter" data-t="250"><time>4:10</time><span>内容包出现：标题候选、正文、引用编号</span></button></li>
+        <li><button class="chapter" data-t="265"><time>4:25</time><span>这次运行的数据卡</span></button></li>
+      </ol>
+      <p class="note" style="margin-top:16px"><b>注意：</b>这是真实运行的录屏，不是生成的演示动画。中途能看到几次 <code>fetch failed</code> 和 404 红点——agent 没有卡住重试，而是换了入口继续查。成稿至今保持「未保存」，没有被自动写进作品库。</p>
+    </section>
+
+    <aside aria-labelledby="numbers">
+      <h2 id="numbers">这次运行</h2>
+      <div class="facts">
+        <div class="fact"><strong>42</strong><span>次工具调用</span></div>
+        <div class="fact"><strong>4/4</strong><span>计划完成</span></div>
+        <div class="fact"><strong>27</strong><span>个来源</span></div>
+        <div class="fact"><strong>0 high</strong><span>Guard 高优问题</span></div>
+        <div class="fact"><strong>75%</strong><span>句子带引用</span></div>
+        <div class="fact"><strong>584</strong><span>字成稿</span></div>
+      </div>
+      <p style="margin-top:14px;font-size:.85rem;color:var(--muted)">模型 deepseek-v4.1-flash · 一次 run 约 4 分钟 · 成稿未保存</p>
+    </aside>
+  </div>
+</div>
+
+<script>
+  const v = document.getElementById("v");
+  document.querySelectorAll(".chapter").forEach((b) => {
+    b.addEventListener("click", () => {
+      v.currentTime = Number(b.dataset.t);
+      v.play();
+      v.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  });
+</script>

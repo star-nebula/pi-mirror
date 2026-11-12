@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-11",
+  "source": "x.com/explore",
+  "items": [
+    {
+      "topic": "Cursor Projects goes multiplayer: agents coordinate across a team",
+      "summary": "Observed on X explore at 2026-11-11: Cursor rebuilt Projects for multiplayer. Multiple posts describe agents coordinating on a shared project; the official Cursor blog post is dated 2026-11-10. Heat shown by X: about 1.9K posts. One widely repeated detail — the '11 people, 62 agents' figure — appeared on X only in this capture and needs an independent source before it is treated as fact.",
+      "heat": "1.9K posts",
+      "url": "https://cursor.com/blog/projects-multiplayer",
+      "posts": [
+        {
+          "url": "https://x.com/tbuzzdaily/status/2120479404581179605",
+          "author": "@tbuzzdaily",
+          "observedAt": "2026-11-11"
+        },
+        {
+          "url": "https://x.com/guilleflorvs/status/2120473027104178676",
+          "author": "@guilleflorvs",
+          "observedAt": "2026-11-11"
+        },
+        {
+          "url": "https://x.com/koussaidev/status/2120472342363345219",
+          "author": "@koussaidev",
+          "observedAt": "2026-11-11"
+        },
+        {
+          "url": "https://x.com/nathanluxford/status/2120451862755168732",
+          "author": "@nathanluxford",
+          "observedAt": "2026-11-11"
+        },
+        {
+          "url": "https://x.com/SinghalPratul/status/2120445660264808832",
+          "author": "@SinghalPratul",
+          "observedAt": "2026-11-11"
+        }
+      ]
+    }
+  ]
+}
