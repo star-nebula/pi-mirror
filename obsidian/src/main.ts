@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { homedir } from "node:os";
 import { resolve } from "node:path";
-import { FileSystemAdapter, Notice, Plugin } from "obsidian";
+import { FileSystemAdapter, Notice, Platform, Plugin } from "obsidian";
 import { DEFAULT_SETTINGS, PiMirrorSettingTab, type PiMirrorSettings } from "./settings";
 import { ServerProcess, checkServerLayout, describeIndex, runIndex, type ServerConfig } from "./server";
 import { openExternalUrl, PiMirrorView, VIEW_TYPE, type WorkbenchHost } from "./view";
@@ -60,7 +60,15 @@ export default class PiMirrorPlugin extends Plugin implements WorkbenchHost {
 
     this.statusBar = this.addStatusBarItem();
     this.statusBar.addClass("pi-mirror-statusbar");
+    this.statusBar.setAttribute("aria-label", "Open the Pi-Mirror workbench");
+    this.statusBar.setAttribute("title", "Open the Pi-Mirror workbench");
+    this.statusBar.addEventListener("click", () => void this.activateView());
     this.updateStatus("idle");
+
+    this.app.workspace.onLayoutReady(() => {
+      if (!this.settings.openOnStartup || !Platform.isDesktopApp) return;
+      void this.activateView();
+    });
   }
 
   override onunload(): void {

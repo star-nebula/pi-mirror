@@ -63,6 +63,14 @@
   color: var(--text-error);
 }
 
+.pi-mirror-status.is-slow .pi-mirror-spinner {
+  color: var(--text-warning);
+}
+
+.pi-mirror-status.is-slow p {
+  max-width: 52ch;
+}
+
 .pi-mirror-status.is-starting .pi-mirror-spinner svg {
   animation: pi-mirror-spin 1.4s linear infinite;
 }
@@ -142,6 +150,10 @@
 
 .pi-mirror-wide-input {
   width: min(46ch, 100%);
+}
+
+.pi-mirror-statusbar {
+  cursor: pointer;
 }
 
 .pi-mirror-statusbar[data-state="running"] {

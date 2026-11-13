@@ -16,6 +16,7 @@ import {
   serverEntry,
   waitForHealth,
 } from "../obsidian/src/server.js";
+import { READY_TYPE, isReadyMessage, originOf } from "../obsidian/src/protocol.js";
 
 const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const PORT = 4517;
@@ -79,6 +80,21 @@ describe("workspace banner", () => {
       "http://127.0.0.1:4321",
     );
     expect(parseWorkspaceUrl("starting…")).toBeNull();
+  });
+});
+
+describe("ready handshake", () => {
+  const url = "http://127.0.0.1:4517";
+
+  it("only accepts the app's own message from the expected origin", () => {
+    expect(isReadyMessage({ type: READY_TYPE }, "http://127.0.0.1:4517", url)).toBe(true);
+    // A stale frame from a previous server, or any other page, must not count.
+    expect(isReadyMessage({ type: READY_TYPE }, "http://127.0.0.1:4518", url)).toBe(false);
+    expect(isReadyMessage({ type: "other" }, "http://127.0.0.1:4517", url)).toBe(false);
+    expect(isReadyMessage(null, "http://127.0.0.1:4517", url)).toBe(false);
+    expect(isReadyMessage({ type: READY_TYPE }, "http://127.0.0.1:4517", null)).toBe(false);
+    expect(originOf("not a url")).toBeNull();
+    expect(originOf("http://127.0.0.1:4517/studio")).toBe(url);
   });
 });
 
@@ -159,6 +175,11 @@ describe("server process", () => {
     // X-Frame-Options cannot name an app:// origin, so it must be absent here.
     expect(page.headers.get("x-frame-options")).toBeNull();
     expect(await page.text()).toContain("<title>");
+
+    // The pane hides its loading panel on this signal, so the web half must
+    // really ship it.
+    const script = await (await fetch(`${url}/app.js`)).text();
+    expect(script).toContain("pi-mirror:ready");
   }, 60_000);
 
   it("picks another port when the preferred one is taken", async () => {

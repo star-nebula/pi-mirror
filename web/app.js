@@ -254,8 +254,19 @@ document.addEventListener("DOMContentLoaded", () => {
     renderChrome();
     render();
   });
-  loadState();
+  loadState().finally(() => signalReady());
 });
+
+/* Embedded hosts (the Obsidian plugin) hide their loading panel on this signal,
+   so a pane that never boots turns into a readable error instead of a blank. */
+function signalReady() {
+  if (window.parent === window) return;
+  try {
+    window.parent.postMessage({ type: "pi-mirror:ready" }, "*");
+  } catch {
+    /* cross-origin parent with a stricter policy; the host has its own timeout */
+  }
+}
 
 function applyStaticCopy() {
   const tagline = $(".brand-text small");

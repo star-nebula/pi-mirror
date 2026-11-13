@@ -9,6 +9,8 @@ export interface PiMirrorSettings {
   port: number;
   /** Index the vault the first time the pane opens (DB missing). */
   indexOnOpen: boolean;
+  /** Open the workbench pane when Obsidian starts. */
+  openOnStartup: boolean;
 }
 
 export const DEFAULT_SETTINGS: PiMirrorSettings = {
@@ -16,6 +18,7 @@ export const DEFAULT_SETTINGS: PiMirrorSettings = {
   nodePath: "node",
   port: 4317,
   indexOnOpen: true,
+  openOnStartup: true,
 };
 
 export class PiMirrorSettingTab extends PluginSettingTab {
@@ -33,6 +36,16 @@ export class PiMirrorSettingTab extends PluginSettingTab {
         "Pi-Mirror runs a local agent over this vault. The pane hosts the workspace server that ships with " +
         "the pi-mirror checkout, so the same code serves the browser and Obsidian.",
     });
+
+    new Setting(containerEl)
+      .setName("Open the workbench")
+      .setDesc("Opens the workbench pane in this vault. The same entry sits on the ribbon and in the status bar.")
+      .addButton((button) =>
+        button
+          .setButtonText("Open")
+          .setCta()
+          .onClick(() => this.plugin.activateView()),
+      );
 
     new Setting(containerEl)
       .setName("Server folder")
@@ -90,6 +103,16 @@ export class PiMirrorSettingTab extends PluginSettingTab {
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.indexOnOpen).onChange(async (value) => {
           this.plugin.settings.indexOnOpen = value;
+          await this.plugin.saveSettings();
+        }),
+      );
+
+    new Setting(containerEl)
+      .setName("Open on startup")
+      .setDesc("Opens the workbench pane when Obsidian starts, so the agent is where you already work.")
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.openOnStartup).onChange(async (value) => {
+          this.plugin.settings.openOnStartup = value;
           await this.plugin.saveSettings();
         }),
       );
