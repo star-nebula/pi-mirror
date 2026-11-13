@@ -30,6 +30,12 @@ export interface WorkspaceOptions {
   port?: number;
   host?: string;
   webRoot?: string;
+  /**
+   * CSP `frame-ancestors` value. Defaults to `'none'`; the Obsidian plugin sets
+   * `'self' app://obsidian.md` so the workspace can live in a vault pane.
+   * Also read from PI_MIRROR_FRAME_ANCESTORS.
+   */
+  frameAncestors?: string;
   /** Feature plugins to compose. Defaults to the live registry. */
   features?: FeaturePlugin[];
   /** Injectable for tests and for embedding a different agent. */
@@ -166,14 +172,33 @@ function serveStatic(res: ServerResponse, webRoot: string, pathname: string): vo
   res.end(body);
 }
 
-function securityHeaders(res: ServerResponse): void {
+/**
+ * Only plain CSP source tokens are allowed here; anything else falls back to
+ * `'none'` so a stray env var cannot widen framing to the whole web.
+ */
+function sanitizeFrameAncestors(raw: string | undefined): string {
+  if (!raw) return "'none'";
+  const value = raw.trim().replace(/\s+/g, " ");
+  if (value === "'none'") return value;
+  if (!/^['a-zA-Z0-9*.:/ _-]+$/.test(value)) return "'none'";
+  for (const token of value.split(" ")) {
+    if (token === "'self'" || token === "'none'") continue;
+    if (/^[a-z][a-z0-9+.-]*:\/\/[a-zA-Z0-9*.:_-]+(?::\d+|\*)?$/.test(token)) continue;
+    return "'none'";
+  }
+  return value;
+}
+
+function securityHeaders(res: ServerResponse, frameAncestors: string): void {
   res.setHeader("x-content-type-options", "nosniff");
   res.setHeader("referrer-policy", "no-referrer");
-  res.setHeader("x-frame-options", "DENY");
+  // X-Frame-Options cannot express an app:// origin, so it only stays for the
+  // strict default. Everything else is decided by CSP frame-ancestors.
+  if (frameAncestors === "'none'") res.setHeader("x-frame-options", "DENY");
   res.setHeader("permissions-policy", "camera=(), microphone=(), geolocation=()");
   res.setHeader(
     "content-security-policy",
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+    `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors ${frameAncestors}`,
   );
 }
 
@@ -356,11 +381,12 @@ export async function startWorkspace(options: WorkspaceOptions): Promise<Workspa
   const webRoot = resolveWebRoot(options.webRoot ?? process.env.PI_MIRROR_WEB);
   const host = options.host ?? "127.0.0.1";
   const requestedPort = options.port ?? Number(process.env.PI_MIRROR_PORT ?? 4317);
+  const frameAncestors = sanitizeFrameAncestors(options.frameAncestors ?? process.env.PI_MIRROR_FRAME_ANCESTORS);
   const ctx = buildContext(options, features, webRoot);
 
   let boundPort = 0;
   const server = createServer((req, res) => {
-    securityHeaders(res);
+    securityHeaders(res, frameAncestors);
     const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "127.0.0.1"}`);
     const pathname = url.pathname;
 

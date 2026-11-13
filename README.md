@@ -99,6 +99,16 @@ npm run build
 pi -e ./dist/extension.js
 ```
 
+### As an Obsidian plugin
+
+The same workbench ships as a desktop Obsidian plugin (`obsidian/`), so the agent can live in a vault pane:
+
+```bash
+node scripts/install-obsidian.mjs E:/knowledge   # any vault path
+```
+
+It copies `main.js`, `manifest.json` and `styles.css` into `<vault>/.obsidian/plugins/pi-mirror`, then you enable **Pi-Mirror** in Settings → Community plugins. The plugin does not reimplement anything: it spawns the compiled server from this checkout (`dist/server/index.js`) with your vault as `PI_MIRROR_VAULT` and hosts its loopback URL in an `ItemView`. It is desktop-only, kills the process tree on unload, and keeps its database inside the plugin folder — notes are still only written through proposals. See [`obsidian/README.md`](obsidian/README.md).
+
 ### Model
 
 Ask, Write and Studio each create a fresh in-memory pi session with only their own tools and system prompt (no other extensions, skills, prompt templates, or context files). The model and provider come from your existing pi settings (`~/.pi/agent/settings.json`); Pi-Mirror does not store or ask for API keys. If no model is usable, the UI shows the pi error instead of inventing an answer.

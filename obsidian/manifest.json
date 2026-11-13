@@ -1,0 +1,10 @@
+{
+  "id": "pi-mirror",
+  "name": "Pi-Mirror",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "A workbench pane for your notes. Ask, draft and guard against your own vault through a local pi agent, with citations and no silent writes.",
+  "author": "star-nebula",
+  "authorUrl": "https://github.com/star-nebula",
+  "isDesktopOnly": true
+}

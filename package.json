@@ -38,7 +38,9 @@
     "test:watch": "vitest",
     "build": "tsc && node scripts/copy-assets.mjs",
     "migrate": "tsx src/db/migrate.ts",
-    "serve": "tsx src/server/index.ts"
+    "serve": "tsx src/server/index.ts",
+    "obsidian:build": "node obsidian/esbuild.config.mjs production",
+    "obsidian:install": "node scripts/install-obsidian.mjs"
   },
   "engines": {
     "node": ">=22.5"
